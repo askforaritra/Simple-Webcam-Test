@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Webcam test</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main>
+  <h1>Webcam test</h1>
+  <p class="sub">Check that your camera works and see what the browser reports about it. Video stays on your device.</p>
+
+  <div class="layout">
+    <section class="panel" aria-label="Camera preview">
+      <div class="stage">
+        <video id="webcam-stream" autoplay playsinline muted>Webcam viewer</video>
+        <canvas id="blurCanvas" hidden></canvas>
+        <div class="msg" id="msg">Select Start camera, then allow access when your browser asks.</div>
+      </div>
+      <div class="row">
+        <button class="primary" id="startBtn">Start camera</button>
+        <button id="stopBtn" disabled>Stop</button>
+        <button id="shotBtn" disabled>Take snapshot</button>
+        <button id="fsBtn" disabled>Full screen</button>
+        <span class="status" id="status"><span class="dot"></span><span id="statusText">Camera off</span></span>
+      </div>
+      <div class="row">
+        <select id="deviceSel" aria-label="Camera" disabled><option>No cameras listed yet</option></select>
+        <select id="resSel" aria-label="Resolution">
+          <option value="">Default resolution</option>
+          <option value="640x480">640 × 480</option>
+          <option value="1280x720">1280 × 720 (HD)</option>
+          <option value="1920x1080">1920 × 1080 (Full HD)</option>
+        </select>
+        <label class="chk"><input type="checkbox" id="mirror" checked> Mirror preview</label>
+        <label class="chk"><input type="checkbox" id="blurChk"> Portrait blur</label>
+        <input type="range" id="blurAmt" min="4" max="24" value="12" aria-label="Blur strength" disabled>
+        <span class="status" id="blurMode"></span>
+      </div>
+      <div class="shots" id="shots" aria-live="polite"></div>
+    </section>
+
+    <aside class="side">
+      <section class="panel">
+        <div class="tabs" role="tablist" aria-label="Webcam data">
+          <button class="tab" role="tab" id="tabBtn-stream" aria-selected="true" aria-controls="tab-stream">Stream</button>
+          <button class="tab" role="tab" id="tabBtn-info" aria-selected="false" aria-controls="tab-info">Information</button>
+        </div>
+        <div id="tab-stream" role="tabpanel" aria-labelledby="tabBtn-stream">
+        <dl>
+          <dt>Camera</dt><dd id="i-label">–</dd>
+          <dt>Resolution</dt><dd id="i-res">–</dd>
+          <dt>Frame rate</dt><dd id="i-fps">–</dd>
+          <dt>Facing</dt><dd id="i-facing">–</dd>
+          <dt>Measured FPS</dt><dd id="i-live">–</dd>
+          <dt>Cameras found</dt><dd id="i-count">–</dd>
+        </dl>
+        </div>
+        <div id="tab-info" role="tabpanel" aria-labelledby="tabBtn-info" hidden>
+          <dl>
+            <dt>Webcam name</dt><dd id="n-name">–</dd>
+            <dt>Quality rating</dt><dd id="n-score">–</dd>
+            <dt>Built-in microphone</dt><dd id="n-mic">–</dd>
+            <dt>Built-in speaker</dt><dd id="n-spk">–</dd>
+            <dt>Frame rate</dt><dd id="n-fps">–</dd>
+            <dt>Stream type</dt><dd id="n-type">–</dd>
+            <dt>Image mode</dt><dd id="n-mode">–</dd>
+            <dt>Megapixels</dt><dd id="n-mp">–</dd>
+            <dt>Resolution</dt><dd id="n-res">–</dd>
+            <dt>Video standard</dt><dd id="n-std">–</dd>
+            <dt>Aspect ratio</dt><dd id="n-ar">–</dd>
+            <dt>PNG file size</dt><dd id="n-png">–</dd>
+            <dt>JPEG file size</dt><dd id="n-jpg">–</dd>
+            <dt>Bitrate</dt><dd id="n-bit">–</dd>
+            <dt>Number of colors</dt><dd id="n-colors">–</dd>
+            <dt>Average RGB color</dt><dd id="n-rgb">–</dd>
+            <dt>Lightness</dt><dd id="n-light">–</dd>
+            <dt>Luminosity</dt><dd id="n-lum">–</dd>
+            <dt>Brightness</dt><dd id="n-bri">–</dd>
+            <dt>Hue</dt><dd id="n-hue">–</dd>
+            <dt>Saturation</dt><dd id="n-sat">–</dd>
+          </dl>
+          <p class="note">Colors, brightness and file sizes come from the current frame and refresh every 2 seconds. Quality rating is an estimate from resolution and frame rate. Bitrate is JPEG size × frame rate.</p>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Troubleshooting</h2>
+        <p class="help" style="margin:0">If nothing appears, check that no other app is using the camera, that this site has camera permission in your browser's address bar, and that the page is opened over HTTPS. If the preview is blocked inside an embedded frame, open the page in its own tab.</p>
+      </section>
+    </aside>
+  </div>
+<section class="panel wide" aria-label="Video call resolutions">
+    <h2>Video call resolutions</h2>
+    <div class="tablewrap">
+      <table id="resTable">
+        <thead><tr><th>Resolution</th><th>Size</th><th>Microsoft Teams</th><th>Zoom</th><th>Google Meet</th><th>Slack</th><th>This camera</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="row">
+      <button id="resTestBtn">Test my camera</button>
+      <span class="status" id="resStatus"></span>
+    </div>
+    <p class="note">Testing briefly turns the camera off and on, and tries each size exactly. Both apps send a lower resolution when bandwidth or the meeting layout requires it. In Zoom, 720p and 1080p depend on your account and settings (1080p has to be enabled by Zoom Support). Google Meet lets you pick the send resolution (360p, 720p or 1080p) in its video settings. Slack's 4K support is as you told me; its help pages only list bandwidth needs (about 600 kbps up and down for a two-person video huddle).</p>
+  </section>
+
+  <p class="credit">Developed by @askforaritra &middot; v<span id="app-version">1.4.1</span></p>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>

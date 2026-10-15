@@ -1,0 +1,12 @@
+{
+  "name": "webcam-test",
+  "version": "1.4.1",
+  "description": "Browser-based webcam viewer and test page with stream details, video-call resolution checks and portrait blur.",
+  "private": true,
+  "license": "MIT",
+  "author": "askforaritra",
+  "scripts": {
+    "start": "npx serve .",
+    "version": "node scripts/sync-version.js && git add index.html"
+  }
+}
